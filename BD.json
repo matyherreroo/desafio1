@@ -1,0 +1,47 @@
+[
+    {
+      "id": 6,
+      "title": "Chocolates",
+      "description": "Tableta de chocolate negro",
+      "price": 250,
+      "thumbnail": "https://imagen_chocolates.jpg",
+      "code": "choco1",
+      "stock": 120
+    },
+    {
+      "id": 7,
+      "title": "Té",
+      "description": "Té verde premium por 100 gr.",
+      "price": 450,
+      "thumbnail": "https://imagen_te.jpg",
+      "code": "te1",
+      "stock": 300
+    },
+    {
+      "id": 8,
+      "title": "Pan Integral",
+      "description": "Pan integral fresco por unidad",
+      "price": 180,
+      "thumbnail": "https://imagen_pan_integral.jpg",
+      "code": "pan1",
+      "stock": 50
+    },
+    {
+      "id": 9,
+      "title": "Yogur Natural",
+      "description": "Yogur natural sin azúcar por 500 gr.",
+      "price": 220,
+      "thumbnail": "https://imagen_yogur.jpg",
+      "code": "yog1",
+      "stock": 180
+    },
+    {
+      "id": 10,
+      "title": "Papel Higiénico",
+      "description": "Paquete de 4 rollos de papel higiénico",
+      "price": 350,
+      "thumbnail": "https://imagen_papel_higienico.jpg",
+      "code": "pap1",
+      "stock": 75
+    }
+  ]
