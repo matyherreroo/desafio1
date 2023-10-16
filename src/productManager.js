@@ -3,7 +3,6 @@ import fs from 'fs'
 
 class ProductManager {
 
-    // Variables privadas
     static id;
     #path
 
@@ -29,7 +28,6 @@ class ProductManager {
     addProduct(title, description, price, thumbnail, code, stock) {
 
         let info
-        //Confirmamos que el code no se repita
         for (let i = 0; i < this.products.length; i++) {
             if (this.products[i].code === code) {
                 info = `El código ${code} esta en uso`
@@ -37,7 +35,6 @@ class ProductManager {
             }
         }
 
-        //Validamos que todos los campos son obligatorios
         const newProduscts = {
             title,
             description,
@@ -48,11 +45,9 @@ class ProductManager {
         };
 
         if (!Object.values(newProduscts).includes(undefined)) {
-            // Incrementams el id
             ProductManager.id++;
             fs.writeFileSync(this.#path, JSON.stringify(this.products))
             this.products.push({
-                // Llamammos al id iautoincremental
                 id: ProductManager.id, ...newProduscts
             })
             
@@ -62,23 +57,19 @@ class ProductManager {
         return info
     }
 
-    //Mostramos todos los productos
     getProduct() {
         return this.products;
     }
 
-    // Validamos si existe el Id
     exist(id) {
         return this.products.find((prod) => prod.id === id)
     }
 
-    //Mostramos los productos por ID
     getProductById(id) {
         let info
         return !this.exist(id) ? info = {error: "Not Found"} : this.exist(id)
     }
 
-    //Actualizamos un producto
     updateProduct(id, properties) {
         let info
 
