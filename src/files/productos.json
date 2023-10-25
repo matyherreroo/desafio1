@@ -1,0 +1,20 @@
+[
+	{
+		"id": 1,
+		"title": "producto prueba",
+		"description": "producto prueba",
+		"price": "200",
+		"thumbnail": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fcommons.wikimedia.org%2Fwiki%2FFile%3AFord_Mustang_GT%2C_20.5.2017_%25284%2529.jpg&psig=AOvVaw1_PQN_xk6CZvr9r847x8Kt&ust=1698350524800000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCMCDp-7-kYIDFQAAAAAdAAAAABAJ",
+		"code": "abc123",
+		"stock": "20"
+	},
+	{
+		"id": 2,
+		"title": "producto prueba 2",
+		"description": "producto de prueba modificado",
+		"price": "50",
+		"thumbnail": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fes.m.wikipedia.org%2Fwiki%2FArchivo%3A2019_Ford_Mustang_GT_5.0_facelift.jpg&psig=AOvVaw1_PQN_xk6CZvr9r847x8Kt&ust=1698350524800000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCMCDp-7-kYIDFQAAAAAdAAAAABAV",
+		"code": "abc143",
+		"stock": "10"
+	}
+]
