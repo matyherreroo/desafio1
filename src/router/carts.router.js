@@ -44,4 +44,4 @@ router.post('/:cid/product/:pid', async (req, res) => {
     }
 })
 
-export default route
+export default router

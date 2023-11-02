@@ -1,6 +1,7 @@
 import { Router } from "express";
 import ProductManager from "../managers/ProductManager.js";
 import { uploader } from "../utils.js";
+import { socketServer } from "../app.js";
 
 const router = Router()
 const productManager = new ProductManager()
@@ -36,11 +37,12 @@ router.post('/', uploader.single('thumbnail'), async (req, res) => {
         const data = req.body
         const filename = req.file.filename
 
-        data.thumbnail = `http://localhost:8080/images/${filename}`
+        data.thumbnail = `http://localhost:8080/static/images/${filename}`
 
         const producto = await productManager.getAddProducts(data)
-
-        res.send(producto)
+        const productos = await productManager.getProducts()
+        socketServer.emit('newProduct', productos)
+        res.json(producto.res)
     } catch (err) {
         res.status(500).send("Error al cargar el producto: " + err)
     }
@@ -70,8 +72,8 @@ router.delete('/:id', async (req, res) => {
         const id = parseInt(req.params.id)
 
         const productEliminated = await productManager.deleteProduct(id)
-
-        res.send(productEliminated)
+        socketServer.emit('deleteProduct', productEliminated.res)
+        res.json(productEliminated.res)
     } catch (err) {
         res.status(500).send("Error al querer eliminar el producto: " + err)
     }

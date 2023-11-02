@@ -1,6 +1,5 @@
 import fs from 'fs'
 
-
 export default class ProductManager {
     constructor (){
         this.path = "./src/files/productos.json"
@@ -35,7 +34,7 @@ export default class ProductManager {
         
     }
 
- 
+
     getAddProducts = async (producto) => {
 
         try{ 
@@ -66,11 +65,11 @@ export default class ProductManager {
             const data = await fs.promises.readFile(this.path, 'utf-8')
             this.products = JSON.parse(data)
 
+
             const validacion = await this.validateCode(producto.code)
             if (validacion){
                 return "El producto ya existe"
             } 
-
 
             if(!producto.title || !producto.description || !producto.price || !producto.thumbnail || !producto.code || !producto.stock) {
                 return "Te falto algun dato"
@@ -86,9 +85,12 @@ export default class ProductManager {
                 code: producto.code,
                 stock: producto.stock
             }
+
             this.products.push(product)
             await fs.promises.writeFile(this.path, JSON.stringify(this.products,null,'\t'))
-            return "Se Creo el producto correctamente"
+            return {
+                    status: "Se Creo el producto correctamente",
+                    res: product}
         }catch (err) {
             return err
         }
@@ -107,6 +109,7 @@ export default class ProductManager {
             return err
         }
     }
+
 
     updateProduct = async (id, update) => {
         try{
@@ -134,7 +137,8 @@ export default class ProductManager {
             const productos = this.products.filter(product => product.id !== id)
 
             await fs.promises.writeFile(this.path, JSON.stringify(productos,null,'\t'))
-            return "Se elimino el producto correctamente"
+            return {status:"Se elimino el producto correctamente",
+                    res: productos}
         } catch (err) {
             return err
         }
