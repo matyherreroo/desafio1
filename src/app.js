@@ -1,28 +1,78 @@
-import express from 'express'
-import handlebars from 'express-handlebars'
-import {Server} from 'socket.io'
-import __dirname from './utils.js'
-import routerProducts from './routes/products.router.js'
-import routerCarts from './routes/carts.router.js'
-import routerViews from './routes/views.router.js'
+import express from 'express';
+import session from 'express-session';
+import cookieParser from 'cookie-parser';
 
-const PORT = 8080
-const app = express()
+import productsRouter from './routes/products-router.js';
+import cartsRouter from './routes/cart-router.js';
+import productsViews from './routes/views-router.js';
+import messageRouter from './routes/messages-router.js';
+import sessionRouter from './routes/session-router.js';
 
-app.use(express.json())
-app.use('/static', express.static(__dirname + '/public'))
+import handlebars from 'express-handlebars';
+import { Server } from 'socket.io';
+import __dirname from './utils.js';
 
-app.engine('handlebars', handlebars.engine())
-app.set('views',__dirname + '/views')
-app.set('view engine', 'handlebars')
+import mongoose from 'mongoose';
+import DBMessageManager from './DAO/mongoDB/messageManager.js';
 
-app.use('/api/products', routerProducts)
-app.use('/api/carts', routerCarts)
-app.use('/home', routerViews)
+import initializePassport from './config/passport-config.js';
+import passport from 'passport';
 
-const http = app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`))
-export const socketServer = new Server(http)
+import config from './config/config.js';  
 
-socketServer.on('connection', socket => {
-    console.log('Cliente conectado')
-})
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.engine('handlebars', handlebars.engine());
+app.set('views', __dirname + '/views');
+app.set('view engine', 'handlebars');
+
+app.use(express.static(__dirname + '/public'));
+
+app.use(session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true
+}));
+
+app.use(cookieParser());
+
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use('/', productsViews);
+app.use('/api/products', productsRouter);
+app.use('/api/carts', cartsRouter);
+app.use('/messages', messageRouter);
+app.use('/api/session', sessionRouter);
+
+const {MONGO_URL, MONGO_DBNAME, PORT }= config
+const httpServer = app.listen(PORT, () => console.log(`Servidor activo en el puerto ${PORT}`));
+const io = new Server(httpServer);
+
+mongoose.connect(MONGO_URL, { dbName: MONGO_DBNAME });
+
+const messages = new DBMessageManager();
+
+io.on('connection', async socket => {
+
+    console.log("Nuevo usuario conectado");
+
+    const messageHistory = await messages.sendMessages();
+
+    socket.on('message', async data => {
+        const newMessage = await messages.addMessage(data);
+        messageHistory.push(data);
+
+        io.emit('messagesLogs', messageHistory);
+    });
+
+    socket.on('userConnect', data => {
+        socket.emit('messagesLogs', messageHistory)
+    })
+});
+
+export { io }
